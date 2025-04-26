@@ -29,7 +29,7 @@ export const signUp = async(req,res,next) => {
 
         await session.commitTransaction()
         session.endSession()
-
+        
         res.status(200).json({
             success : true,
             message : 'User created successfully',
@@ -57,7 +57,7 @@ export const signIn = async(req,res,next) => {
 
         if (!user){
             const error = new Error('user not found')
-            error.statusCode = 200
+            error.statusCode = 404
             throw error
         }
 
@@ -65,7 +65,7 @@ export const signIn = async(req,res,next) => {
 
         if(!isPasswordValid){
             const error = new Error('password is not valid')
-            error.statusCode = 200
+            error.statusCode = 400
             throw error
         }
 
