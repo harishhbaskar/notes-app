@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import "./login.css"
+import {useNavigate} from 'react-router-dom';
 
 export default function Login() {
     const [isRightPanelActive , setIsRightPanelActive] = React.useState(false)
@@ -8,6 +9,10 @@ export default function Login() {
     const [signUpFormData , setSignUpFormData] = React.useState({name:'',email:'',password:''})
 
     const [signInFormData , setSignInFormData] = React.useState({email:'',password:''})
+
+    const[signUpError , setSignUpError] = React.useState("");
+
+    const navigate = useNavigate();
 
     const handleSignUpOverlay = () => {
         setIsRightPanelActive(true)
@@ -39,17 +44,21 @@ export default function Login() {
 
         try{
             const response = await axios.post('http://localhost:5000/api/v1/auth/sign-up',signUpFormData)
-
+            const token = response.data.token;
+            localStorage.setItem('token',token)
             if(response.data.success){
-                console.log('user createed successfully')
+                navigate('/notes');
+                console.log('user created successfully')
             }
             
             else{
                 console.log(response.data.message)
+                setSignUpError(response.data.message || 'unknown error')
             }
 
         }catch(error){
             console.error('error during sign-up',error.response?.data?.message || "therla")
+            setSignUpError(error.response?.data?.message || 'Error during sign up');
         }
 
     }
@@ -60,8 +69,10 @@ export default function Login() {
 
         try{
             const response = await axios.post('http://localhost:5000/api/v1/auth/sign-in',signInFormData)
-
+            const token =response.data.token;
+            localStorage.setItem('token',token);
             if(response.data.success){
+                navigate('/notes');
                 console.log('user logged in successfully')
             }
 
@@ -83,6 +94,11 @@ export default function Login() {
                         <input type="text" placeholder="Name" name="name" value={signUpFormData.name} onChange={handleSignUpChange}/>
                         <input type="email" placeholder="Email" name="email" value={signUpFormData.email} onChange={handleSignUpChange}/>
                         <input type="password" placeholder="Password" name="password"value={signUpFormData.password} onChange={handleSignUpChange}/>
+                        {signUpError && (
+                        <div className="error-text">
+                            <span className="error-icon">!</span>{signUpError}
+                        </div>
+                    )}
                         <button >Sign Up</button>
                     </form>
                 </div>

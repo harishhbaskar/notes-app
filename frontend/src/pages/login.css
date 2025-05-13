@@ -249,3 +249,21 @@ footer a {
     color: #3c97bf;
     text-decoration: none;
 }
+
+.input-error {
+    border: 1px solid red;
+}
+
+.error-text {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+	margin-bottom:4px;
+}
+
+.error-icon {
+    font-size: 14px;
+}

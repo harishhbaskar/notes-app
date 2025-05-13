@@ -1,4 +1,4 @@
-const errorMiddleware = (err,req,res,next) => {
+export const errorMiddleware = (err,req,res,next) => {
     let error = {...err}
 
     error.message = err.message
